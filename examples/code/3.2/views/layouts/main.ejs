@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link href="/vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <title>
+        <%- blocks.title %>
+    </title>
+</head>
+<body cz-shortcut-listen="true">
+
+<%- partial('navbar') %>
+<div class="container">
+    <div class="starter-template">
+        <h1><%- blocks.title %></h1>
+        <%- body %>
+    </div>
+</div>
+</body>
+</html>
