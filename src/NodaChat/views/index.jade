@@ -13,7 +13,7 @@ block content
     #context-menu.open(style='position: absolute; display:none')
       ul.dropdown-menu(role='menu')
         li
-          a#privateMsgAction(tabindex='-1') Send private message
+          a.privateMsgAction(tabindex='-1') Send private message
     #loginModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='Login', aria-hidden='true')
       .modal-dialog
         .modal-content
@@ -42,16 +42,6 @@ block content
                   | CHAT HISTORY
                 .panel-body
                   ul#privateChatMessages.media-list
-                    li.media
-                      .media-body
-                        .media
-                          a.pull-left(href='#')
-                            img.media-object.img-circle(style='max-height:60px;', src='../images/user.png')
-                          .media-body
-                            | Test Test Test Test Test
-                            br
-                            small.text-muted Test Test | 15rd April at 5:00pm
-                            hr
                 .panel-footer
           .modal-footer
             .input-group
