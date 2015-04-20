@@ -29,27 +29,43 @@
     }
     
     function addChatMessage(data) {
-        var $usernameDiv = $("<span class=\"username\"/>").text(data.username);
-        var $messageBodyDiv = $("<span class=\"messageBody\">").text(data.message);
-        var $messageDiv = $("<li class=\"message\"/>").data("username", data.username).append($usernameDiv, $messageBodyDiv);
-        addChatMessageElement($messageDiv);
+        
+        var avatarUrl = "../images/user.png";
+        var $userAvatarImage = $("<img style='max-height:60px;' class=\"media-object img-circle\">").attr("src", avatarUrl);;
+        var $userAvatar = $("<a href='#' class=\"pull-left\">").append($userAvatarImage);
+        
+        var now = new Date();
+        var message = data.username + " | " + now;
+        var $msg = $("<small class=\"text-muted\">").text(message);
+        var $divMsg = $("<div class=\"media-body\">").text(data.message).append("<br/>", $msg, "<hr/>");
+        
+        var $messageDiv = $("<div class=\"media\">").append($userAvatar, $divMsg);
+        var $mainLi = $("<li class=\"media\"/>").append($messageDiv);
+
+        addChatMessageElement($mainLi);
     }
     
     function addUsersMessage(data) {
-        var $usernameDiv = $("<span class=\"username\"/>").text(data.username);
-        var $messageBodyDiv = $("<span class=\"messageBody\">").text(data.message);
-        var $messageDiv = $("<li class=\"message\"/>").data("username", data.username).append($usernameDiv, $messageBodyDiv);
-        addUsersElement($messageDiv);
+        
+        var avatarUrl = "../images/user.png";
+        var $userAvatarImage = $("<img style='max-height:40px;' class=\"media-object img-circle\">").attr("src", avatarUrl);;
+        var $userAvatar = $("<a href='#' class=\"pull-left\">").append($userAvatarImage);
+
+        var role = "User";
+        var message = data.username + " | " + role;
+        var $msg = $("<h5>").text(message);
+        var $divMsg = $("<div class=\"media-body\">").append($msg);
+        
+        var $mediaDiv = $("<div class=\"media\">").append($userAvatar, $divMsg);
+        var $messageDiv = $("<div class=\"media-body\" id='context' data-toggle='context' data-target='#context-menu'>").append($mediaDiv);
+        var $mainLi = $("<li class=\"media\"/>").append($messageDiv);
+        
+        addUsersElement($mainLi);
     }
     
     function updateChat(message) {
         var $el = $("<li>").addClass("log").text(message);
         addChatMessageElement($el);
-    }
-    
-    function updateUsers(message) {
-        var $el = $("<li>").addClass("log").text(message);
-        addUsersElement($el);
     }
     
     function addParticipantsMessage(data) {
@@ -60,7 +76,6 @@
             message += "there are " + data.numUsers + " participants";
         }
         updateChat(message);
-        updateUsers(message);
     }
     
     function cleanInput(input) {
@@ -79,7 +94,6 @@
             return;
         }
         
-        username = "TestTODO";
         $inputMessage.val("");
         addChatMessage({
             username: username,
@@ -127,11 +141,13 @@
         var message = "Welcome to chat – ";
         updateChat(message, { prepend: true });
         addParticipantsMessage(data);
+        addUsersMessage(data);
     });
     
     socket.on("user joined", function (data) {
         updateChat(data.username + " joined");
         addParticipantsMessage(data);
+        addUsersMessage(data);
     });
     
     socket.on("new message", function (data) {

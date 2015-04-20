@@ -22,7 +22,8 @@
             addedUser = true;
 
             socket.emit("login", {
-                numUsers: numberOfUsers
+                numUsers: numberOfUsers,
+                username: username
             });
             socket.broadcast.emit("user joined", {
                 username: socket.username,
