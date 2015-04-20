@@ -10,7 +10,11 @@ html(lang='en')
     img(src='../images/socketiologo.png', alt='socketiologo')
 
 block content
-    #loginpage.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+    #context-menu.open(style='position: absolute; display:none')
+      ul.dropdown-menu(role='menu')
+        li
+          a#privateMsgAction(tabindex='-1') Send private message
+    #loginModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='Login', aria-hidden='true')
       .modal-dialog
         .modal-content
           .modal-header
@@ -25,6 +29,35 @@ block content
                 input#inputPassword.form-control(type='text', placeholder='Password')
           .modal-footer
             button#btnLogin.btn.btn-info.pull-right(type='submit') Login
+    #privateMsgModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='PrivateMessages', aria-hidden='true')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+            h4.modal-title Private Messages
+          .modal-body
+            .panel.panel-info
+                .panel-heading
+                  | CHAT HISTORY
+                .panel-body
+                  ul#privateChatMessages.media-list
+                    li.media
+                      .media-body
+                        .media
+                          a.pull-left(href='#')
+                            img.media-object.img-circle(style='max-height:60px;', src='../images/user.png')
+                          .media-body
+                            | Test Test Test Test Test
+                            br
+                            small.text-muted Test Test | 15rd April at 5:00pm
+                            hr
+                .panel-footer
+          .modal-footer
+            .input-group
+              input#inputPrivateMessage.form-control(type='text', placeholder='Enter Message')
+              span.input-group-btn
+                button#btnSendPrivateMessagee.btn.btn-info(type='button') SEND
     .container
         .row(style='padding-top: 40px')
             br
@@ -39,9 +72,9 @@ block content
                       .media-body
                         .media
                           a.pull-left(href='#')
-                            img.media-object.img-circle(style='max-height:60px;',src='../images/user.png')
+                            img.media-object.img-circle(style='max-height:60px;', src='../images/user.png')
                           .media-body
-                            | Test Test Test Test Test Test Test Test Test Test Test Test
+                            | Test Test Test Test Test
                             br
                             small.text-muted Test Test | 15rd April at 5:00pm
                             hr
@@ -57,7 +90,7 @@ block content
                 .panel-body
                   ul#usersList.media-list
                     li.media
-                      .media-body
+                      .media-body#context(data-toggle='context', data-target='#context-menu')
                         .media
                           a.pull-left(href='#')
                             img.media-object.img-circle(style='max-height:40px;', src='../images/user.png')

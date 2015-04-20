@@ -32,6 +32,7 @@
   <ItemGroup>
     <Compile Include="configuration\config.js" />
     <Compile Include="database\dataAccess.js" />
+    <Compile Include="public\scripts\bootstrap-contextmenu.js" />
     <Compile Include="public\scripts\bootstrap.js" />
     <Compile Include="public\scripts\bootstrap.min.js" />
     <Compile Include="public\scripts\chat.js" />

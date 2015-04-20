@@ -2,14 +2,16 @@
     
     var socket = io();
 
-    var $loginModal = $("#loginpage"); // Login modal window
-    var $inputMessage = $("#inputMessage"); // Input message input box
-    var $btnSendMessage = $("#btnSendMessage"); // Send message button
-    var $btnLogin = $("#btnLogin"); // Login button
-    var $inputNickname = $("#inputNickname"); // Textbox with nickname
-    var $inputPassword = $("#inputPassword"); // Textbox with password
-    var $chatMessages = $("#chatMessages"); // Messages area
-    var $usersList = $("#usersList"); // Users list area
+    var $loginModal = $("#loginModal");
+    var $privateMsgModal = $("#privateMsgModal");
+    var $privateMsgAction = $("#privateMsgAction");
+    var $inputMessage = $("#inputMessage");
+    var $btnSendMessage = $("#btnSendMessage");
+    var $btnLogin = $("#btnLogin");
+    var $inputNickname = $("#inputNickname");
+    var $inputPassword = $("#inputPassword");
+    var $chatMessages = $("#chatMessages");
+    var $usersList = $("#usersList");
     
     var username;
     var connected = false;
@@ -114,6 +116,10 @@
     
     $btnSendMessage.click(function () {
         sendMessage();
+    });
+    
+    $privateMsgAction.click(function () {
+        $privateMsgModal.modal({ backdrop: "static" });
     });
     
     socket.on("login", function (data) {
