@@ -10,10 +10,6 @@ html(lang='en')
     img(src='../images/socketiologo.png', alt='socketiologo')
 
 block content
-    #context-menu.open(style='position: absolute; display:none')
-      ul.dropdown-menu(role='menu')
-        li
-          a.privateMsgAction(tabindex='-1') Send private message
     #loginModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='Login', aria-hidden='true')
       .modal-dialog
         .modal-content
@@ -40,14 +36,13 @@ block content
             .panel.panel-info
                 .panel-heading
                   | CHAT HISTORY
-                .panel-body
+                .panel-body.chathistory
                   ul#privateChatMessages.media-list
                 .panel-footer
-          .modal-footer
-            .input-group
-              input#inputPrivateMessage.form-control(type='text', placeholder='Enter Message')
-              span.input-group-btn
-                button#btnSendPrivateMessagee.btn.btn-info(type='button') SEND
+                  .input-group
+                    input#inputPrivateMessage.form-control(type='text', placeholder='Enter Message')
+                    span.input-group-btn
+                     button#btnSendPrivateMessagee.btn.btn-info(type='button') SEND
     .container
         .row(style='padding-top: 40px')
             br
@@ -56,7 +51,7 @@ block content
               .panel.panel-info
                 .panel-heading
                   | CHAT HISTORY
-                .panel-body
+                .panel-body.chathistory
                   ul#chatMessages.media-list
                 .panel-footer
                   .input-group
@@ -66,6 +61,6 @@ block content
             .col-md-4
               .panel.panel-primary
                 .panel-heading
-                  | ONLINE USERS
+                  | ONLINE USERS (Click for private chat)
                 .panel-body
                   ul#usersList.media-list

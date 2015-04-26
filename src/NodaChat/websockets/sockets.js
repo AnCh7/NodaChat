@@ -1,46 +1,79 @@
-﻿module.exports = function(app, io) {
-
+﻿module.exports = function (app, io) {
+    
     var connectedUsers = {};
-    var numberOfUsers = 0;
-
-    io.on("connection", function(socket) {
+    
+    io.on("connection", function (socket) {
         var addedUser = false;
-
-        socket.on("new message", function(data) {
-            socket.broadcast.emit("new message", {
-                username: socket.username,
-                message: data
-            });
+        
+        socket.on("new message", function (data) {
+            if (data.to === "all") {
+                socket.broadcast.emit("new message", {
+                    from: socket.username,
+                    to: "all",
+                    message: data.message
+                });
+            } else {
+                connectedUsers[data.to].emit('new private message', data);
+            }
         });
         
-        socket.on("new private message", function (data) {
-            io.to(socketid).emit('message', 'for your eyes only');
-        });
-
-        socket.on("add user", function(username) {
+        socket.on("add user", function (username) {
             socket.username = username;
-            ++numberOfUsers;
             addedUser = true;
-
-            socket.emit("login", {
-                numUsers: numberOfUsers,
-                connectedUsers: connectedUsers,
+            
+            socket.emit("welcome_message", {
+                message: "Welcome to chat - " + username + " !"
+            });
+            
+            socket.emit("add_to_users_list", {
                 username: username
             });
-            socket.broadcast.emit("user joined", {
-                username: socket.username,
-                numUsers: numberOfUsers
+            
+            socket.broadcast.emit("add_to_users_list", {
+                username: username
             });
-            connectedUsers[username] = username;
+            
+            socket.emit("fill_connected_users", {
+                connectedUsers: Object.keys(connectedUsers)
+            });
+            
+            socket.broadcast.emit("chat_message_joined", {
+                message: socket.username + " joined"
+            });
+            
+            var message = "";
+            if (Object.keys(connectedUsers).length === 1) {
+                message += "there's 1 participant";
+            } else {
+                message += "there are " + Object.keys(connectedUsers).length + " participants";
+            }
+            socket.emit("participants_message", {
+                message: message
+            });
+            
+            connectedUsers[username] = socket;
         });
-
-        socket.on("disconnect", function() {
+        
+        socket.on("disconnect", function () {
             if (addedUser) {
                 delete connectedUsers[socket.username];
-                --numberOfUsers;
-                socket.broadcast.emit("user left", {
-                    username: socket.username,
-                    numUsers: numberOfUsers
+                
+                socket.broadcast.emit("remove_from_users_list", {
+                    username: socket.username
+                });
+                
+                var message = "";
+                if (Object.keys(connectedUsers).length === 1) {
+                    message += "there's 1 participant";
+                } else {
+                    message += "there are " + Object.keys(connectedUsers).length + " participants";
+                }
+                socket.emit("participants_message", {
+                    message: message
+                });
+
+                socket.broadcast.emit("chat_message_left", {
+                    message: socket.username + " left"
                 });
             }
         });
