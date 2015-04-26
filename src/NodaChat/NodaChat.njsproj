@@ -46,9 +46,6 @@
     <Content Include="database\storage.json" />
     <Content Include="package.json" />
     <Content Include="public\favicons\favicon.ico" />
-    <Content Include="public\images\expresslogo.png" />
-    <Content Include="public\images\nodejslogo.png" />
-    <Content Include="public\images\socketiologo.png" />
     <Content Include="public\images\user.png" />
     <Content Include="public\stylesheets\chat.css" />
     <Content Include="public\stylesheets\bootstrap-theme.css" />
@@ -63,6 +60,7 @@
     <Content Include="public\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="public\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="public\scripts\jquery.min.map" />
+    <Content Include="runforever.bat" />
     <Content Include="views\layout.jade" />
     <Content Include="views\error.jade" />
     <Content Include="views\index.jade" />

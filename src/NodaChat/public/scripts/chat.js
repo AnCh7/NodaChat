@@ -1,7 +1,7 @@
 ﻿$(function () {
     
     "use strict";
-
+    
     var socket = io();
     var userEmail;
     var connected = false;
@@ -63,6 +63,10 @@
         addMessageElement($el, $("#chatMessages"));
     }
     
+    function validateInput(input) {
+        return $("<div/>").text(input).text();
+    }
+    
     function sendMessage(data) {
         if (!data) {
             return;
@@ -99,12 +103,13 @@
             data: { email: email, password: password }
         }).done(function (msg) {
             if (msg.success) {
+                userEmail = msg.data.email;
                 socket.emit("add user", msg.data.email);
                 $("#loginModal").modal("hide");
             } else {
                 var errors = msg.data;
-                $("#emailError").text('');
-                $("#passwordError").text('');
+                $("#emailError").text("");
+                $("#passwordError").text("");
                 errors.forEach(function (error) {
                     if (error.param === "email") {
                         $("#emailError").html(error.msg);
@@ -125,24 +130,24 @@
     $("#btnSendMessage").click(function () {
         var message = $("#inputMessage").val();
         $("#inputMessage").val("");
-        
-        var data = { from: userEmail, to: "all", message: message };
-        
-        sendMessage(data);
+        message = validateInput(message);
+        if (message) {
+            var data = { from: userEmail, to: "all", message: message };
+            sendMessage(data);
+        }
     });
     
     $("#btnSendPrivateMessagee").click(function () {
         var message = $("#inputPrivateMessage").val();
         $("#inputPrivateMessage").val("");
-        
-        var to = $(".modal-title").attr("id");
-        var data = { from: userEmail, to: to, message: message };
-        
-        sendMessage(data);
+        message = validateInput(message);
+        if (message) {
+            var to = $(".modal-title").attr("id");
+            var data = { from: userEmail, to: to, message: message };
+            sendMessage(data);
+        }
     });
     
-
-
     socket.on("welcome_message", function (data) {
         connected = true;
         updateChat(data.message, { prepend: true });
@@ -167,11 +172,11 @@
     socket.on("chat_message_left", function (data) {
         updateChat(data.message);
     });
-
+    
     socket.on("participants_message", function (data) {
         updateChat(data.message);
     });
-
+    
     socket.on("new message", function (data) {
         addChatMessage(data, false);
     });
