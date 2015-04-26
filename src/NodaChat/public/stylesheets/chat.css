@@ -2,3 +2,11 @@
     max-height: 500px;
     overflow-y: scroll;
 }
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.errorText { color: red; }

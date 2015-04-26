@@ -1,7 +1,9 @@
 ﻿$(function () {
     
+    "use strict";
+
     var socket = io();
-    var username;
+    var userEmail;
     var connected = false;
     
     function addMessageElement(el, list) {
@@ -38,20 +40,20 @@
         var $userAvatar = $("<a href='#'/>").addClass("pull-left").append($userAvatarImage);
         
         var role = "User";
-        var message = data.username + " | " + role;
+        var message = data.userEmail + " | " + role;
         var $msg = $("<h5/>").text(message);
         var $divMsg = $("<div/>").addClass("media-body").append($msg);
         
         var $mediaDiv = $("<div/>").addClass("media").append($userAvatar, $divMsg);
         var $messageDiv = $("<div/>").addClass("media-body").append($mediaDiv);
-        var $mainLi = $("<li/>").addClass("media").attr("id", data.username).attr("data-toggle", "tooltip").attr("title", "Click for private chat").append($messageDiv);
+        var $mainLi = $("<li/>").addClass("media").attr("id", data.userEmail).attr("data-toggle", "tooltip").attr("title", "Click for private chat").append($messageDiv);
         
         addMessageElement($mainLi, $("#usersList"));
     }
     
     function addConnectedActiveUsers(connectedUsers) {
         $.each(connectedUsers, function (index, value) {
-            var data = { username: value };
+            var data = { userEmail: value };
             addUserToActiveUsers(data);
         });
     }
@@ -59,10 +61,6 @@
     function updateChat(message) {
         var $el = $("<li>").addClass("log").text(message);
         addMessageElement($el, $("#chatMessages"));
-    }
-    
-    function cleanInput(input) {
-        return $("<div/>").text(input).text();
     }
     
     function sendMessage(data) {
@@ -85,26 +83,37 @@
     $("#loginModal").modal({ backdrop: "static" });
     
     $("#usersList").delegate("li", "click", function () {
-        $("#privateMsgModal .modal-title").html("Private chat with " + this.id);
-        $(".modal-title").attr("id", this.id);
-        $("#privateMsgModal").modal({ backdrop: "static" });
+        if (this.id !== userEmail) {
+            $("#privateMsgModal .modal-title").html("Private chat with " + this.id);
+            $(".modal-title").attr("id", this.id);
+            $("#privateMsgModal").modal({ backdrop: "static" });
+        }
     });
     
     $("#btnLogin").click(function () {
-        var nickname = $("#inputNickname").val();
+        var email = $("#inputEmail").val();
         var password = $("#inputPassword").val();
         $.ajax({
             method: "POST",
             url: "/login",
-            data: { nickname: nickname, password: password }
-        }).done(function (data, error) {
-            if (error === "success") {
-                username = cleanInput(nickname.trim());
-                socket.emit("add user", username);
-                
+            data: { email: email, password: password }
+        }).done(function (msg) {
+            if (msg.success) {
+                socket.emit("add user", msg.data.email);
                 $("#loginModal").modal("hide");
             } else {
-                console.log("Error: " + error);
+                var errors = msg.data;
+                $("#emailError").text('');
+                $("#passwordError").text('');
+                errors.forEach(function (error) {
+                    if (error.param === "email") {
+                        $("#emailError").html(error.msg);
+                    }
+                    if (error.param === "password") {
+                        $("#passwordError").html(error.msg);
+                    }
+                });
+                console.log("Error: " + msg.data);
             }
         });
     });
@@ -115,21 +124,19 @@
     
     $("#btnSendMessage").click(function () {
         var message = $("#inputMessage").val();
-        message = cleanInput(message);
         $("#inputMessage").val("");
         
-        var data = { from: username, to: "all", message: message };
+        var data = { from: userEmail, to: "all", message: message };
         
         sendMessage(data);
     });
     
     $("#btnSendPrivateMessagee").click(function () {
         var message = $("#inputPrivateMessage").val();
-        message = cleanInput(message);
         $("#inputPrivateMessage").val("");
         
         var to = $(".modal-title").attr("id");
-        var data = { from: username, to: to, message: message };
+        var data = { from: userEmail, to: to, message: message };
         
         sendMessage(data);
     });
@@ -146,7 +153,7 @@
     });
     
     socket.on("remove_from_users_list", function (data) {
-        $("#" + data.username).remove();
+        $("#" + data.userEmail).remove();
     });
     
     socket.on("fill_connected_users", function (data) {

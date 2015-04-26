@@ -16,13 +16,21 @@ block content
           .modal-header
             h4.modal-title Please login
           .modal-body
-            form(role='form')
-              .form-group
-                label(for='nickname') Nickname
-                input#inputNickname.form-control(type='text', placeholder='Nickname')
-              .form-group
-                label(for='password') Password
-                input#inputPassword.form-control(type='text', placeholder='Password')
+            .container-fluid
+              .row
+                .col-md-2.vcenter
+                  label(for='email') Email
+                .col-md-4.vcenter
+                  input#inputEmail.form-control(type='text', placeholder='Email')
+                .col-md-6.vcenter.errorText
+                  label#emailError
+              .row(style='padding-top: 10px')
+                .col-md-2.vcenter
+                  label(for='password') Password
+                .col-md-4.vcenter
+                  input#inputPassword.form-control(type='text', placeholder='Password')
+                .col-md-6.vcenter.errorText
+                  label#passwordError
           .modal-footer
             button#btnLogin.btn.btn-info.pull-right(type='submit') Login
     #privateMsgModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='PrivateMessages', aria-hidden='true')

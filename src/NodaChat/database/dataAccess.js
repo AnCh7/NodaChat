@@ -1,20 +1,13 @@
 ﻿var Nedb = require("nedb");
-var sanitize = require("validator");
 
 module.exports = function() {
 
     "use strict";
     var db = new Nedb({ filename: __dirname + "/storage.json", autoload: true });
 
-    function escape(str) {
-        var value = sanitize.escape(str);
-        return sanitize.escape(value).trim();
-    }
-
-    function saveUser(nickname, password, callback) {
-        nickname = escape(nickname);
+    function saveUser(email, password, callback) {
         db.insert({
-            nickname: nickname,
+            email: email,
             password: password
         }, function(err, newDoc) {
             if (err) {
@@ -25,8 +18,8 @@ module.exports = function() {
         });
     }
 
-    function findUser(nickname, callback) {
-        db.find({ nickname: nickname }, function(err, docs) {
+    function findUser(email, callback) {
+        db.find({ email: email }, function(err, docs) {
             if (err) {
                 callback(err);
             } else {

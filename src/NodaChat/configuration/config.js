@@ -1,10 +1,12 @@
-﻿var express = require("express");
+﻿var util = require('util');
+var express = require("express");
 var path = require("path");
 var favicon = require("serve-favicon");
 var logger = require("morgan");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var socketio = require("socket.io");
+var validator = require("express-validator");
 
 module.exports = function(app) {
 
@@ -23,6 +25,7 @@ module.exports = function(app) {
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(validator());
 
     app.use(cookieParser());
 

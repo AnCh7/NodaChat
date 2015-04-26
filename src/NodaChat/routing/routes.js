@@ -1,15 +1,19 @@
-﻿module.exports = function(app, io, dataAccess) {
+﻿var validator = require("express-validator");
 
+module.exports = function (app, io, dataAccess) {
+    
+    "use strict";
+    
     var db = new dataAccess();
-
-    function authorize(nickname, password, callback) {
-        console.log("Login attempt: " + nickname + ", " + password);
-        db.findUser(nickname, function(err, data) {
+    
+    function authorize(email, password, callback) {
+        console.log("Login attempt: " + email + ", " + password);
+        db.findUser(email, function (err, data) {
             if (err) {
                 callback(err);
             } else if (data.length === 0) {
-                console.log("Register attempt: " + nickname + ", " + password);
-                db.saveUser(nickname, password, function(err, data) {
+                console.log("Register attempt: " + email + ", " + password);
+                db.saveUser(email, password, function (err, data) {
                     if (err) {
                         callback(err);
                     } else {
@@ -22,26 +26,33 @@
             }
         });
     }
-
-    app.get("/", function(req, res) {
+    
+    app.get("/", function (req, res) {
         res.render("index");
     });
-
-    app.post("/login", function(req, res, next) {
-
-        var nickname = req.body.nickname,
-            password = req.body.password;
-
-        authorize(nickname, password, function(err, data) {
-            if (err) {
-                return next();
-            }
-            res.json(data);
-        });
+    
+    app.post("/login", function (req, res, next) {
+        
+        req.assert('email', 'Incorrect email address').isEmail();
+        req.assert('password', 'Password is required').notEmpty();
+        
+        var errors = req.validationErrors();
+        if (errors) {
+            var response = { success: false, data: errors };
+            res.json(response);
+        } else {
+            authorize(req.body.email, req.body.password, function (err, data) {
+                if (err) {
+                    return next(err);
+                }
+                var response = { success: true, data: data };
+                res.json(response);
+            });
+        }
     });
-
-    app.get("/db", function(req, res, next) {
-        db.findAll(function(err, data) {
+    
+    app.get("/db", function (req, res, next) {
+        db.findAll(function (err, data) {
             if (err) {
                 return next(err);
             } else {
