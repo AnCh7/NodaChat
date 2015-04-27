@@ -9,7 +9,7 @@
     function addMessageElement(el, list) {
         var $el = $(el);
         list.append($el);
-        list[0].scrollTop = list[0].scrollHeight;
+        $('.chathistory').scrollTop(list.height());
     }
     
     function addChatMessage(data, isPrivate) {

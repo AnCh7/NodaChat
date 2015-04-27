@@ -5,6 +5,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>NodaChat</Name>
     <RootNamespace>NodaChat</RootNamespace>
+    <NameOfLastUsedPublishProfile>nodachat</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -42,8 +43,15 @@
     <Compile Include="readme.md" />
     <Compile Include="websockets\sockets.js" />
     <Compile Include="app.js" />
+    <Content Include="bin\ChangeConfig.ps1" />
+    <Content Include="bin\download.ps1" />
+    <Content Include="bin\node.cmd" />
+    <Content Include="bin\setup_web.cmd" />
     <Content Include="bower.json" />
     <Content Include="database\storage.json" />
+    <None Include="nodachat.pubxml" />
+    <Content Include="Web.config" />
+    <None Include="Web.Debug.config" />
     <Content Include="package.json" />
     <Content Include="public\favicons\favicon.ico" />
     <Content Include="public\images\user.png" />
@@ -66,6 +74,7 @@
     <Content Include="views\index.jade" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="bin\" />
     <Folder Include="database\" />
     <Folder Include="configuration\" />
     <Folder Include="public\fonts\" />
