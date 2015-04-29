@@ -40,7 +40,7 @@
     <Compile Include="public\scripts\moment.min.js" />
     <Compile Include="public\scripts\socket.io.js" />
     <Compile Include="routing\routes.js" />
-    <Compile Include="readme.md" />
+    <Compile Include="readme.txt" />
     <Compile Include="websockets\sockets.js" />
     <Compile Include="app.js" />
     <Content Include="bin\ChangeConfig.ps1" />
